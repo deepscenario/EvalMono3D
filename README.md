@@ -10,7 +10,11 @@
 
 The official evaluation toolkit for **[CARLA Drone: Monocular 3D Object Detection from a Different Perspective](https://arxiv.org/abs/2408.11958)** (GCPR 2024, **oral**).
 
-<img src="assets/hero.png" width="100%" alt="EvalMono3D hero figure: 2D overlap looks great, but oriented 3D IoU is strict.">
+Johannes Meier · Luca Scalerandi · Oussema Dhaouadi · Jacques Kaiser · Nikita Araslanov · Daniel Cremers
+
+**DeepScenario** · **Technical University of Munich** · **Munich Center for Machine Learning (MCML)**
+
+<img src="assets/teaser.png" width="100%" alt="EvalMono3D teaser: 2D overlap looks great, but oriented 3D IoU is strict.">
 
 </div>
 

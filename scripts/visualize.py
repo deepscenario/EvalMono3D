@@ -10,7 +10,7 @@ annotates each match with its full-``SO(3)`` 3D IoU and TP/FP verdict at the
 
 Usage::
 
-    python scripts/visualize.py            # -> assets/hero.png
+    python scripts/visualize.py            # -> assets/teaser.png
 """
 
 import argparse
@@ -45,6 +45,16 @@ THEMES = {
     "light": dict(BG="#ffffff", PANEL="#f6f8fa", GRID="#d0d7de", INK="#1f2328",
                   MUTED="#57606a", GT_C="#1a7f37", TP_C="#0969da", FP_C="#cf222e"),
 }
+_PALETTE_KEYS = ("BG", "PANEL", "GRID", "INK", "MUTED", "GT_C", "TP_C", "FP_C")
+
+# Active palette, set by apply_theme() before drawing. Defaults to light.
+BG = PANEL = GRID = INK = MUTED = GT_C = TP_C = FP_C = ""
+
+
+def apply_theme(name):
+    """Activate a colour theme for the module-level drawing code."""
+    global BG, PANEL, GRID, INK, MUTED, GT_C, TP_C, FP_C
+    BG, PANEL, GRID, INK, MUTED, GT_C, TP_C, FP_C = (THEMES[name][k] for k in _PALETTE_KEYS)
 
 # Cuboid faces by corner index (front 0-3, back 4-7); see DATA.md.
 FACES = [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]]
@@ -83,12 +93,11 @@ def ground_grid(ax, K, y=7.0, x_range=(-26, 30), z_range=(11, 46), step=4):
 
 
 def main(theme="light", out_path=None):
-    globals().update(THEMES[theme])  # expose BG, GRID, INK, GT_C, ... to the drawing code
-    out_path = out_path or os.path.join(HERE, "assets", "hero.png")
+    apply_theme(theme)
+    out_path = out_path or os.path.join(HERE, "assets", "teaser.png")
 
     gt = json.load(open(GT_PATH))
     K = gt["images"][0]["K"]
-    W, H = gt["images"][0]["width"], gt["images"][0]["height"]
     gt_boxes = [np.array(a["bbox3D_cam"]) for a in gt["annotations"]]
 
     preds = torch.load(PRED_PATH)[0]["instances"]
@@ -172,6 +181,6 @@ def main(theme="light", out_path=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Render the EvalMono3D hero figure.")
     parser.add_argument("--theme", choices=list(THEMES), default="light")
-    parser.add_argument("--out", default=None, help="output path (default: assets/hero.png)")
+    parser.add_argument("--out", default=None, help="output path (default: assets/teaser.png)")
     args = parser.parse_args()
     main(theme=args.theme, out_path=args.out)
