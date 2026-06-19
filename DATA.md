@@ -107,13 +107,15 @@ predictions [{
 
 instance {
     "image_id"          : int,
-    "category_id"       : int,
-    "bbox"              : [x1, y1, w, h],
-    "score"             : float,
-    "depth"             : float,
-	"bbox3D"		    : [[x1, y1, z1]...[x8, y8, z8]]	# 3D corners in meters and camera coordinates
-	"center_cam"		: [x, y, z],				    # 3D center in meters and camera coordinates
-	"center_2D" 		: [xc, yc],
-	"dimensions"		: [width, height, length],		# 3D attributes for object dimensions in meters
-	"R_cam"			    : list (3x3),				    # 3D rotation matrix to the camera frame rotation
+    "category_id"       : int,                          # contiguous category id, matching the GT category ids
+    "bbox"              : [x1, y1, w, h],               # 2D box, used for 2D IoU
+    "score"             : float,                         # confidence, used to rank detections
+    "depth"             : float,                         # object depth (z), used for the 3D depth bins
+    "bbox3D"            : [[x1, y1, z1]...[x8, y8, z8]]  # 3D corners in meters, camera coords, used for 3D IoU
 }
+```
+
+Only the six fields above are required for evaluation. The model dump may carry
+extra fields (`center_cam`, `center_2D`, `dimensions`, `R_cam`, ...); they are
+ignored by the evaluator. Predicted `category_id`s are the contiguous ids
+produced by the model and must match the ground-truth `category_id`s.

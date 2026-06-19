@@ -1,0 +1,17 @@
+# Core evaluation dependencies.
+#
+# pytorch3d provides the exact SO(3) 3D-box intersection and is the only
+# non-trivial install: follow https://github.com/facebookresearch/pytorch3d
+# (it must be built against your installed torch / CUDA). Everything else is a
+# plain pip install. See README.md for a tested conda recipe.
+numpy
+torch>=1.13
+pytorch3d>=0.7
+pycocotools
+tabulate
+
+# Optional: only needed to regenerate the hero figure (scripts/visualize.py).
+matplotlib
+
+# Optional: test runner for the reproducibility check (tests/).
+pytest

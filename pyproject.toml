@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evalmono3d"
+version = "1.0.0"
+description = "Monocular 3D object detection evaluation with full SO(3) rotation (CDrone, GCPR 2024)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "CC-BY-NC-4.0" }
+authors = [{ name = "Johannes Meier" }]
+keywords = ["3d-object-detection", "monocular", "evaluation", "average-precision", "SO3", "cdrone"]
+
+# NOTE: pytorch3d is required at runtime but is intentionally not listed here -- it
+# must be built against your installed torch/CUDA and is not a plain pip install.
+# See the README for a tested conda recipe.
+dependencies = [
+    "numpy",
+    "torch>=1.13",
+    "pycocotools",
+    "tabulate",
+]
+
+[project.optional-dependencies]
+viz = ["matplotlib"]
+test = ["pytest"]
+
+[project.urls]
+"Paper" = "https://arxiv.org/abs/2408.11958"
+"Project page" = "https://deepscenario.github.io/CDrone/"
+"Source" = "https://github.com/deepscenario/EvalMono3D"
+
+[project.scripts]
+evalmono3d = "evalmono3d.cli:main"
+
+[tool.setuptools]
+packages = ["evalmono3d"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
