@@ -10,7 +10,7 @@
 
 The official evaluation toolkit for **[CARLA Drone: Monocular 3D Object Detection from a Different Perspective](https://arxiv.org/abs/2408.11958)** (GCPR 2024, **oral**).
 
-Johannes Meier · Luca Scalerandi · Oussema Dhaouadi · Jacques Kaiser · Nikita Araslanov · Daniel Cremers
+[Johannes Meier](https://www.linkedin.com/in/johannes-meier-52a159b4/) · [Luca Scalerandi](https://www.linkedin.com/in/luca-scalerandi) · [Oussema Dhaouadi](https://www.linkedin.com/in/oussema-dhaouadi/) · [Jacques Kaiser](https://www.linkedin.com/in/jacqueskaiser/) · [Nikita Araslanov](https://arnike.github.io/) · [Daniel Cremers](https://cvg.cit.tum.de/members/cremers)
 
 **DeepScenario** · **Technical University of Munich** · **Munich Center for Machine Learning (MCML)**
 
