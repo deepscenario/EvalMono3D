@@ -13,6 +13,7 @@ Usage::
     python scripts/visualize.py            # -> assets/hero.png
 """
 
+import argparse
 import json
 import logging
 import os
@@ -36,17 +37,14 @@ logging.disable(logging.CRITICAL)
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GT_PATH = os.path.join(HERE, "example", "cdrone_test_example.json")
 PRED_PATH = os.path.join(HERE, "example", "cdrone_test_example_pred.pth")
-OUT_PATH = os.path.join(HERE, "assets", "hero.png")
 
-# Palette (dark, high-contrast).
-BG = "#0d1117"
-PANEL = "#161b22"
-GRID = "#21323f"
-INK = "#e6edf3"
-MUTED = "#8b949e"
-GT_C = "#3fb950"      # ground truth   -> green
-TP_C = "#58a6ff"      # true positive  -> blue
-FP_C = "#f85149"      # false positive -> red
+# Two palettes; GT -> green, TP -> blue, FP -> red in both.
+THEMES = {
+    "dark": dict(BG="#0d1117", PANEL="#161b22", GRID="#21323f", INK="#e6edf3",
+                 MUTED="#8b949e", GT_C="#3fb950", TP_C="#58a6ff", FP_C="#f85149"),
+    "light": dict(BG="#ffffff", PANEL="#f6f8fa", GRID="#d0d7de", INK="#1f2328",
+                  MUTED="#57606a", GT_C="#1a7f37", TP_C="#0969da", FP_C="#cf222e"),
+}
 
 # Cuboid faces by corner index (front 0-3, back 4-7); see DATA.md.
 FACES = [[0, 1, 2, 3], [4, 5, 6, 7], [0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7]]
@@ -84,7 +82,10 @@ def ground_grid(ax, K, y=7.0, x_range=(-26, 30), z_range=(11, 46), step=4):
         ax.plot(uv[:, 0], uv[:, 1], color=GRID, lw=0.8, zorder=0)
 
 
-def main():
+def main(theme="light", out_path=None):
+    globals().update(THEMES[theme])  # expose BG, GRID, INK, GT_C, ... to the drawing code
+    out_path = out_path or os.path.join(HERE, "assets", "hero.png")
+
     gt = json.load(open(GT_PATH))
     K = gt["images"][0]["K"]
     W, H = gt["images"][0]["width"], gt["images"][0]["height"]
@@ -163,10 +164,14 @@ def main():
     fig.text(0.70, 0.045, "←  the gap SO(3) evaluation reveals", ha="left", fontsize=13,
              color=MUTED, style="italic")
 
-    fig.savefig(OUT_PATH, facecolor=BG, bbox_inches=None)
+    fig.savefig(out_path, facecolor=BG, bbox_inches=None)
     w, h = (fig.get_size_inches() * fig.dpi).astype(int)
-    print(f"wrote {OUT_PATH} ({w}x{h})")
+    print(f"wrote {out_path} ({w}x{h}, {theme} theme)")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Render the EvalMono3D hero figure.")
+    parser.add_argument("--theme", choices=list(THEMES), default="light")
+    parser.add_argument("--out", default=None, help="output path (default: assets/hero.png)")
+    args = parser.parse_args()
+    main(theme=args.theme, out_path=args.out)
